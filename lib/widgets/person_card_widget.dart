@@ -10,46 +10,49 @@ class PersonCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PeopleProvider>(context);
-    const titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-    final isFav = provider.isFavorite(person);
-    IconData icon = isFav ? Icons.favorite : Icons.favorite_border;
-    Color color = isFav ? Colors.red : Theme.of(context).colorScheme.primary;
-
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).colorScheme.tertiary,
-      ),
-      width: 20,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<PeopleProvider>(
+      builder: (context, provider, child) {
+        const titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+        final isFav = provider.isFavorite(person);
+        IconData icon = isFav ? Icons.favorite : Icons.favorite_border;
+        Color color =
+            isFav ? Colors.red : Theme.of(context).colorScheme.primary;
+        return Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
+          width: 20,
+          child: Column(
             children: [
-              Text(person.name, style: titleStyle),
-              IconButton(
-                icon: Icon(icon, color: color),
-                onPressed: () => provider.addToFavorite(person),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(person.name, style: titleStyle),
+                  IconButton(
+                    icon: Icon(icon, color: color),
+                    onPressed: () => provider.addToFavorite(person),
+                  )
+                ],
+              ),
+              Container(
+                height: 1,
+                margin: const EdgeInsets.only(bottom: 10),
+                width: double.infinity,
+                color: const Color.fromARGB(255, 172, 172, 172),
+              ),
+              _item("Altura:", "${person.height} CM"),
+              _item("Peso:", "${person.mass} KG"),
+              _item("Color de ojos:", person.eyeColor),
+              _item("Color de cabello:", person.hairColor),
+              _item("Color de piel:", person.skinColor),
+              _item("Año de nacimiento:", person.birthYear),
+              _item("Genero", person.gender),
             ],
           ),
-          Container(
-            height: 1,
-            margin: const EdgeInsets.only(bottom: 10),
-            width: double.infinity,
-            color: const Color.fromARGB(255, 172, 172, 172),
-          ),
-          _item("Altura:", "${person.height} CM"),
-          _item("Peso:", "${person.mass} KG"),
-          _item("Color de ojos:", person.eyeColor),
-          _item("Color de cabello:", person.hairColor),
-          _item("Color de piel:", person.skinColor),
-          _item("Año de nacimiento:", person.birthYear),
-          _item("Genero", person.gender),
-        ],
-      ),
+        );
+      },
     );
   }
 

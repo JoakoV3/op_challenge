@@ -49,7 +49,7 @@ class PeopleProvider extends ChangeNotifier {
 
   void addToFavorite(Person people) {
     isFavorite(people)
-        ? favoritePeople.remove(people)
+        ? favoritePeople.removeWhere((element) => element.url == people.url)
         : favoritePeople.add(people);
     notifyListeners();
   }
@@ -69,7 +69,7 @@ class PeopleProvider extends ChangeNotifier {
   }
 
   void clearFavoriteSearch() {
-    searchController.clear();
+    favoriteSearchController.clear();
     filteredFavorite = favoritePeople;
     notifyListeners();
   }
