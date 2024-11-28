@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class BouncingImage extends StatefulWidget {
-  const BouncingImage({super.key});
+class BouncingImageWidget extends StatefulWidget {
+  const BouncingImageWidget({super.key});
 
   @override
-  State<BouncingImage> createState() => _BouncingImageState();
+  State<BouncingImageWidget> createState() => _BouncingImageWidgetState();
 }
 
-class _BouncingImageState extends State<BouncingImage>
+class _BouncingImageWidgetState extends State<BouncingImageWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;

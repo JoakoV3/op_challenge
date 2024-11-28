@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:op_flutter_challenge/pages/home_page.dart';
+import 'package:op_flutter_challenge/pages/pages.dart';
 import 'package:op_flutter_challenge/providers/people_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/favorites': (context) => const FavoritesPage(),
+      },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,

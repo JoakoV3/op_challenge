@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class People {
+class Person {
   String name;
   String height;
   String mass;
@@ -18,7 +18,7 @@ class People {
   DateTime edited;
   String url;
 
-  People({
+  Person({
     required this.name,
     required this.height,
     required this.mass,
@@ -37,11 +37,11 @@ class People {
     required this.url,
   });
 
-  factory People.fromRawJson(String str) => People.fromJson(json.decode(str));
+  factory Person.fromRawJson(String str) => Person.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory People.fromJson(Map<String, dynamic> json) => People(
+  factory Person.fromJson(Map<String, dynamic> json) => Person(
         name: json["name"],
         height: json["height"],
         mass: json["mass"],
