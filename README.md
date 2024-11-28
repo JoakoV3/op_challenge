@@ -21,6 +21,10 @@ Este proyecto está desarrollado utilizando las siguientes tecnologías:
 - **Provider**: Para la gestión del estado en la aplicación.
 - **Mockito**: Librería de mocking para realizar pruebas unitarias.
 
+## Video demostrativo
+
+https://github.com/user-attachments/assets/71ca7727-cdb3-41ab-a8ac-a60db61a0a35
+
 ## Requisitos
 
 Antes de ejecutar el proyecto, asegúrate de tener los siguientes programas instalados en tu máquina:
@@ -50,7 +54,3 @@ Sigue los siguientes pasos para levantar el proyecto en tu máquina:
     ```bash
     flutter run
     ```
-
-## Video demostrativo
-
-Puedes ver un video demostrativo de la aplicación en el siguiente enlace: [Video demostrativo](https://drive.google)
