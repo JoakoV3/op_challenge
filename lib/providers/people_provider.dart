@@ -28,7 +28,10 @@ class PeopleProvider extends ChangeNotifier {
   }
 
   Future<void> changePage(String search, {bool goBack = false}) async {
-    if (currentPage >= totalPages || (goBack && currentPage == 1)) return;
+    if ((!goBack && currentPage >= totalPages) ||
+        (goBack && currentPage == 1)) {
+      return;
+    }
     changeLoading(true);
     currentPage = goBack ? currentPage - 1 : currentPage + 1;
     final response = await _service.getPeople(currentPage, search);

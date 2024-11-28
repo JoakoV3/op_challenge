@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> {
     final currentPage = provider.currentPage;
     final count = provider.totalPages;
     final isFirstPage = currentPage == 1;
+    final isLastPage = currentPage == count;
     final search = provider.searchController.text;
     return Container(
       decoration: BoxDecoration(
@@ -110,7 +111,8 @@ class _HomePageState extends State<HomePage> {
             style: const TextStyle(color: Colors.black),
           ),
           IconButton(
-            onPressed: () => provider.changePage(search),
+            disabledColor: Colors.black38,
+            onPressed: isLastPage ? null : () => provider.changePage(search),
             icon: const Icon(Icons.arrow_forward),
             color: Colors.black,
           ),
