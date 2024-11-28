@@ -57,6 +57,7 @@ class PeopleProvider extends ChangeNotifier {
   void searchFavorite(String value) {
     if (value.isEmpty) {
       filteredFavorite = favoritePeople;
+      notifyListeners();
       return;
     }
 

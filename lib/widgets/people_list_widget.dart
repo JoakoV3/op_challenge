@@ -11,19 +11,28 @@ class PeopleListWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.only(bottom: 60),
-        child: GridView.builder(
-          itemCount: people.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: (MediaQuery.of(context).size.width ~/ 250).toInt(),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 1.3,
+        child: SingleChildScrollView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * .8,
+              ),
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: people
+                    .map((person) => SizedBox(
+                          width: 300,
+                          height: 290,
+                          child: PersonCardWidget(
+                            key: Key(person.url),
+                            person: person,
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ),
           ),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final person = people[index];
-            return PersonCardWidget(key: Key(person.url), person: person);
-          },
         ),
       ),
     );

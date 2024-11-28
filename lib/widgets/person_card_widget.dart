@@ -37,6 +37,7 @@ class PersonCardWidget extends StatelessWidget {
           ),
           Container(
             height: 1,
+            margin: const EdgeInsets.only(bottom: 10),
             width: double.infinity,
             color: const Color.fromARGB(255, 172, 172, 172),
           ),
@@ -44,6 +45,9 @@ class PersonCardWidget extends StatelessWidget {
           _item("Peso:", "${person.mass} KG"),
           _item("Color de ojos:", person.eyeColor),
           _item("Color de cabello:", person.hairColor),
+          _item("Color de piel:", person.skinColor),
+          _item("Año de nacimiento:", person.birthYear),
+          _item("Genero", person.gender),
         ],
       ),
     );
