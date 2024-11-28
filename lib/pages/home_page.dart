@@ -3,17 +3,33 @@ import 'package:op_flutter_challenge/models/people.dart';
 import 'package:op_flutter_challenge/providers/people_provider.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late PeopleProvider provider;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider = Provider.of<PeopleProvider>(context, listen: false);
+      provider.getPeople(provider.searchController.text);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PeopleProvider>(context);
-    provider.getPeople(provider.searchController.text);
+    provider = Provider.of<PeopleProvider>(context);
+
     return Scaffold(
       body: Column(
         children: [
-          _searchBar(),
+          _searchBar(provider),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(8.0),
@@ -44,6 +60,10 @@ class HomePage extends StatelessWidget {
   }
 
   Container _floatingButton(BuildContext context) {
+    final currentPage = provider.currentPage;
+    final count = provider.totalPages;
+    final isFirstPage = currentPage == 1;
+    final search = provider.searchController.text;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -53,13 +73,19 @@ class HomePage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            onPressed: () {},
+            disabledColor: Colors.black38,
             icon: const Icon(Icons.arrow_back),
             color: Colors.black,
+            onPressed: isFirstPage
+                ? null
+                : () => provider.changePage(search, goBack: true),
           ),
-          const Text("1 de 2", style: TextStyle(color: Colors.black)),
+          Text(
+            "$currentPage de $count",
+            style: const TextStyle(color: Colors.black),
+          ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => provider.changePage(search),
             icon: const Icon(Icons.arrow_forward),
             color: Colors.black,
           ),
@@ -68,13 +94,24 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Padding _searchBar() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  Padding _searchBar(PeopleProvider provider) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Center(
         child: SearchBar(
-          leading: Icon(Icons.search),
+          controller: provider.searchController,
+          leading: const Icon(Icons.search),
           hintText: "Buscar personaje de Star Wars",
+          trailing: [
+            IconButton(
+              onPressed: () {
+                provider.searchController.clear();
+                provider.getPeople("");
+              },
+              icon: const Icon(Icons.clear),
+            ),
+          ],
+          onSubmitted: (value) => provider.getPeople(value),
         ),
       ),
     );
