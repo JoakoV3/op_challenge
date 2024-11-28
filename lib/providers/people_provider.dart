@@ -12,23 +12,26 @@ class PeopleProvider extends ChangeNotifier {
   bool loading = true;
 
   Future<void> getPeople(String search) async {
-    loading = true;
+    changeLoading(true);
     final response = await _service.getPeople(1, search);
     people = response.results;
     currentPage = 1;
     totalPages = response.count > 10 ? (response.count / 10).truncate() : 1;
-    loading = false;
-    notifyListeners();
+    changeLoading(false);
   }
 
   Future<void> changePage(String search, {bool goBack = false}) async {
     if (currentPage >= totalPages || (goBack && currentPage == 1)) return;
-    loading = true;
+    changeLoading(true);
     currentPage = goBack ? currentPage - 1 : currentPage + 1;
     final response = await _service.getPeople(currentPage, search);
     people.clear();
     people = response.results;
-    loading = false;
+    changeLoading(false);
+  }
+
+  void changeLoading(bool value) {
+    loading = value;
     notifyListeners();
   }
 }

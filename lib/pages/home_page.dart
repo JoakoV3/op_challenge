@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:op_flutter_challenge/models/people.dart';
 import 'package:op_flutter_challenge/providers/people_provider.dart';
+import 'package:op_flutter_challenge/widgets/bouncing_image.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,35 +28,78 @@ class _HomePageState extends State<HomePage> {
     provider = Provider.of<PeopleProvider>(context);
 
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          _searchBar(provider),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              margin: const EdgeInsets.only(bottom: 60),
-              child: GridView.builder(
-                itemCount: provider.people.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:
-                      (MediaQuery.of(context).size.width ~/ 250).toInt(),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1.3,
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Image(
+                      image: AssetImage('assets/star-wars.png'),
+                      width: 100,
+                    ),
+                    const SizedBox(width: 20),
+                    _searchBar(provider),
+                    const SizedBox(width: 20),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "FAVORITOS",
+                        style: TextStyle(color: Colors.yellow),
+                      ),
+                    )
+                  ],
                 ),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  final person = provider.people[index];
-                  return _person(context, person);
-                },
               ),
-            ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.only(bottom: 60),
+                  child: GridView.builder(
+                    itemCount: provider.people.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          (MediaQuery.of(context).size.width ~/ 250).toInt(),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 1.3,
+                    ),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final person = provider.people[index];
+                      return _personCard(context, person);
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
+          if (provider.people.isEmpty && !provider.loading) _notFound(),
+          if (provider.loading) const BouncingImage(),
         ],
       ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: _floatingButton(context),
+    );
+  }
+
+  Center _notFound() {
+    const textStyle = TextStyle(
+      color: Colors.yellow,
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+    );
+
+    return Center(
+      child: Text(
+        "No se encontraron personajes que coincidan con: \"${provider.searchController.text}\"",
+        style: textStyle,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -94,9 +138,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding _searchBar(PeopleProvider provider) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  Flexible _searchBar(PeopleProvider provider) {
+    return Flexible(
       child: Center(
         child: SearchBar(
           controller: provider.searchController,
@@ -117,7 +160,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container _person(BuildContext context, People person) {
+  Container _personCard(BuildContext context, People person) {
     const titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
     return Container(
       padding: const EdgeInsets.all(10),
@@ -146,10 +189,10 @@ class _HomePageState extends State<HomePage> {
             width: double.infinity,
             color: const Color.fromARGB(255, 172, 172, 172),
           ),
-          _item("Altura", "${person.height} CM"),
-          _item("Peso", "${person.mass} KG"),
-          _item("Color de ojos", person.eyeColor),
-          _item("Color de cabello", person.hairColor),
+          _item("Altura:", "${person.height} CM"),
+          _item("Peso:", "${person.mass} KG"),
+          _item("Color de ojos:", person.eyeColor),
+          _item("Color de cabello:", person.hairColor),
         ],
       ),
     );
